@@ -1111,7 +1111,7 @@ function renderCompetitors() {
 }
 
 function renderCompTable() {
-  const sorted = [...COMPETITORS].sort((a, b) => {
+  const others = COMPETITORS.filter(c => !c.isMine).sort((a, b) => {
     const keys = [null, 'domain', 'totalSitePages', 'avgWords', 'faqPages', 'localSchema', 'ctaPages', 'idx'];
     const key = keys[compSortCol];
     if (!key) return 0;
@@ -1119,6 +1119,8 @@ function renderCompTable() {
     const cmp = typeof av === 'string' ? av.localeCompare(bv) : av - bv;
     return compSortAsc ? cmp : -cmp;
   });
+  const me = COMPETITORS.find(c => c.isMine);
+  const sorted = [me, ...others];
 
   const maxPages = Math.max(...COMPETITORS.map(c => c.totalSitePages));
   document.getElementById('compTableBody').innerHTML = sorted.map((c, i) => {
